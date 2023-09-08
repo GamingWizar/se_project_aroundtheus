@@ -1,0 +1,48 @@
+@media (max-width: 800px) {
+  .profile__add {
+    width: 50px;
+  }
+
+  .profile__name {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 620px) {
+  .page__content {
+    margin-top: 30px;
+  }
+
+  .header__logo {
+    width: 126px;
+  }
+
+  .profile {
+    flex-direction: column;
+    margin-bottom: 35px;
+  }
+
+  .profile__info {
+    grid-gap: 14px 10px;
+  }
+
+  .profile__avatar {
+    margin: 0px 0px 30px 0px;
+  }
+
+  .profile__name {
+    font-size: 22px;
+  }
+
+  .profile__description {
+    font-size: 14px;
+    margin: 0px auto 36px;
+  }
+  .profile__add {
+    width: 280px;
+    margin: 0px auto;
+  }
+  .footer__text {
+    font-size: 14px;
+  }
+}
