@@ -18,4 +18,4 @@ Add annimations to smooth out website
 
 ## Link to website
 
-https://github.com/GamingWizar/se_project_aroundtheus
+https://gamingwizar.github.io/se_project_aroundtheus/
