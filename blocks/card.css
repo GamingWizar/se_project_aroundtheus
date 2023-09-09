@@ -1,8 +1,8 @@
 .card {
   background-color: white;
   border-radius: 10px;
-  width: 282px;
-  height: 361px;
+  max-width: 282px;
+  min-height: 361px;
   margin: 0;
 }
 
@@ -21,6 +21,9 @@
 }
 
 .card__text {
+  color: black;
+  font-weight: 900;
+  font-size: 24px;
   margin: 0;
   max-width: 210px;
   text-overflow: ellipsis;
@@ -38,4 +41,5 @@
 
 .card__heart:hover {
   opacity: 50%;
+  cursor: pointer;
 }

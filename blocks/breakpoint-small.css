@@ -1,13 +1,3 @@
-@media (max-width: 800px) {
-  .profile__add {
-    width: 50px;
-  }
-
-  .profile__name {
-    font-size: 32px;
-  }
-}
-
 @media (max-width: 620px) {
   .page__content {
     margin-top: 30px;
@@ -38,10 +28,21 @@
     font-size: 14px;
     margin: 0px auto 36px;
   }
+
+  .profile__edit {
+    background: transparent url(../images/edit-button_small.svg) no-repeat;
+    width: 18px;
+    height: 18px;
+  }
+
   .profile__add {
     width: 280px;
     margin: 0px auto;
   }
+  .content {
+    margin-bottom: 48px;
+  }
+
   .footer__text {
     font-size: 14px;
   }
