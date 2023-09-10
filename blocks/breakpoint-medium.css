@@ -1,9 +1,0 @@
-@media (max-width: 800px) {
-  .profile__add {
-    width: 50px;
-  }
-
-  .profile__name {
-    font-size: 32px;
-  }
-}

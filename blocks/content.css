@@ -1,3 +1,9 @@
 .content {
   margin-bottom: 67px;
 }
+
+@media (max-width: 620px) {
+  .content {
+    margin-bottom: 48px;
+  }
+}

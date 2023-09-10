@@ -1,8 +1,25 @@
 .header {
   margin-bottom: 42px;
   border-bottom: 1px solid rgb(84 84 84 / 70%);
+  margin-top: 45px;
 }
 
 .header__logo {
   margin-bottom: 40px;
+}
+
+@media (max-width: 920px) {
+  .header__logo {
+    margin-left: 27px;
+  }
+}
+
+@media (max-width: 620px) {
+  .header__logo {
+    width: 126px;
+    margin-bottom: 32px;
+  }
+  .header {
+    margin-top: 30px;
+  }
 }

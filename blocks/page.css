@@ -6,7 +6,6 @@
 }
 
 .page__content {
-  margin-top: 45px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -20,3 +19,9 @@
   position: relative;
   margin: 0px auto;
 }
+
+/* @media (max-width: 620px) {
+  .page__content {
+    margin-top: 30px;
+  }
+} */
