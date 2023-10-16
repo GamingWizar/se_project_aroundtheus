@@ -9,6 +9,7 @@
   </head>
   <body class="page">
     <script src="./scripts/index.js"></script>
+
     <header class="header page__section">
       <img src="./images/logo.svg" alt="Around the U S" class="header__logo" />
     </header>
@@ -101,6 +102,27 @@
       <footer class="footer page__section">
         <p class="footer__text">© 2022 Around The U.S.</p>
       </footer>
+    </div>
+    <div class="modal modal_opened">
+      <div class="modal__container">
+        <form class="modal__form">
+          <h1 class="modal__title">Edit Profile</h1>
+          <input
+            type="text"
+            class="modal__input modal__input-first"
+            placeholder="Name"
+          />
+          <input type="text" class="modal__input" placeholder="Description" />
+          <button type="submit" class="modal__submit">Save</button>
+          <button type="button" class="modal__close">
+            <img
+              class="modal__close__buttom-image"
+              src="./images/close.svg"
+              alt="Close"
+            />
+          </button>
+        </form>
+      </div>
     </div>
   </body>
 </html>
