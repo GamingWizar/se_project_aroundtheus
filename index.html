@@ -36,6 +36,7 @@
           <template id="cardTemplate">
             <li class="card">
               <img class="card__image" src="" alt="" />
+              <button class="card__delete" type="button"></button>
               <div class="card__bottom">
                 <h2 class="card__text"></h2>
                 <button class="card__heart" type="button"></button>
@@ -48,9 +49,10 @@
         <p class="footer__text">© 2022 Around The U.S.</p>
       </footer>
     </div>
-    <div class="modal">
+    <!-- Profile Edit Modal -->
+    <div class="modal profile-edit__modal">
       <div class="modal__container">
-        <form class="modal__form">
+        <form class="modal__form" id="profile-edit__form">
           <h2 class="modal__title">Edit Profile</h2>
           <input
             type="text"
@@ -63,6 +65,32 @@
             placeholder="Description"
           />
           <button type="submit" class="modal__submit">Save</button>
+          <button type="button" class="modal__close">
+            <img
+              class="modal__close-buttom-image"
+              src="./images/close.svg"
+              alt="Close"
+            />
+          </button>
+        </form>
+      </div>
+    </div>
+    <!-- Card Adder Modal -->
+    <div class="modal card-adder__modal">
+      <div class="modal__container">
+        <form class="modal__form" id="add-card__form">
+          <h2 class="modal__title">New place</h2>
+          <input
+            type="text"
+            class="modal__input modal__input-first modal__input_title"
+            placeholder="Title"
+          />
+          <input
+            type="text"
+            class="modal__input modal__input_image-link"
+            placeholder="Image link"
+          />
+          <button type="submit" class="modal__submit">Create</button>
           <button type="button" class="modal__close">
             <img
               class="modal__close-buttom-image"

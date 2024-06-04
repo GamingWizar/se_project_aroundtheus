@@ -33,42 +33,86 @@ function getCardElement(data) {
   cardElement.querySelector(".card__text").textContent = cardName;
   cardElement.querySelector(".card__image").src = cardImage;
   cardElement.querySelector(".card__image").alt = cardName;
+  let cardHeart = cardElement.querySelector(".card__heart");
+  cardHeart.addEventListener("click", (event) => {
+    cardHeart.classList.toggle("card__heart_liked");
+  });
+  let cardDelete = cardElement.querySelector(".card__delete");
+  cardDelete.addEventListener("click", (event) => {
+    cardElement.remove();
+  });
   return cardElement;
 }
 
 let cardList = document.querySelector(".cards");
 
-for (let i = 0; i < initialCards.length; i++) {
-  cardList.append(getCardElement(initialCards[i]));
-}
+initialCards.forEach((item) => {
+  cardList.append(getCardElement(item));
+});
 
-let modal = document.querySelector(".modal");
-let modalName = modal.querySelector(".modal__input_name");
-let modalDescription = modal.querySelector(".modal__input_description");
+let profileEditModal = document.querySelector(".profile-edit__modal");
+let profileModalName = profileEditModal.querySelector(".modal__input_name");
+let profileModalDescription = profileEditModal.querySelector(
+  ".modal__input_description"
+);
 let profile = document.querySelector(".profile");
 let profileName = profile.querySelector(".profile__name");
 let profileDecsription = profile.querySelector(".profile__description");
 profile
   .querySelector(".profile__edit")
   .addEventListener("click", function (event) {
-    modal.classList.add("modal_opened");
-    modalName.value = profileName.textContent;
-    modalDescription.value = profileDecsription.textContent;
+    profileEditModal.classList.add("modal_opened");
+    profileModalName.value = profileName.textContent;
+    profileModalDescription.value = profileDecsription.textContent;
   });
 
-let modalCloseButton = modal.querySelector(".modal__close");
-modalCloseButton.addEventListener("click", function (event) {
-  modal.classList.remove("modal_opened");
+let profileModalCloseButton = profileEditModal.querySelector(".modal__close");
+profileModalCloseButton.addEventListener("click", function (event) {
+  profileEditModal.classList.remove("modal_opened");
 });
 
-let profileForm = modal.querySelector(".modal__form");
+let profileForm = profileEditModal.querySelector(".modal__form");
 
 function handleProfileFormSubmit(event) {
   event.preventDefault();
   console.log("Form Submitting!");
-  profileName.textContent = modalName.value;
-  profileDecsription.textContent = modalDescription.value;
-  modal.classList.remove("modal_opened");
+  profileName.textContent = profileModalName.value;
+  profileDecsription.textContent = profileModalDescription.value;
+  profileEditModal.classList.remove("modal_opened");
 }
 
 profileForm.addEventListener("submit", handleProfileFormSubmit);
+
+let cardAdderModal = document.querySelector(".card-adder__modal");
+let cardAdderModalTitle = cardAdderModal.querySelector(".modal__input_title");
+let cardAdderModalLink = cardAdderModal.querySelector(
+  ".modal__input_image-link"
+);
+
+profile.querySelector(".profile__add").addEventListener("click", (event) => {
+  cardAdderModal.classList.add("modal_opened");
+});
+
+let cardAdderCloseButton = cardAdderModal.querySelector(".modal__close");
+cardAdderCloseButton.addEventListener("click", (event) => {
+  cardAdderModal.classList.remove("modal_opened");
+});
+
+let cardAdderForm = cardAdderModal.querySelector(".modal__form");
+
+function handleCardAdderFormSubmit(event) {
+  event.preventDefault();
+  console.log("Form Submitting!");
+  let cardInfo = { name: "", link: "" };
+  cardInfo.name = cardAdderModalTitle.value;
+  cardInfo.link = cardAdderModalLink.value;
+  let finalCard = getCardElement(cardInfo);
+  cardList.prepend(finalCard);
+  cardAdderModal.classList.remove("modal_opened");
+}
+
+cardAdderForm.addEventListener("submit", handleCardAdderFormSubmit);
+
+profile.querySelector(".profile__add").addEventListener("click", (event) => {
+  cardAdderModal.classList.add("modal_opened");
+});

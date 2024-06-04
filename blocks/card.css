@@ -4,6 +4,7 @@
   max-width: 282px;
   min-height: 361px;
   margin: 0;
+  position: relative;
 }
 
 .card__image {
@@ -39,7 +40,28 @@
   transition: opacity 0.1s linear 0s;
 }
 
+.card__heart_liked {
+  background-image: url(../images/heart_solid.svg);
+}
+
 .card__heart:hover {
+  opacity: 50%;
+  cursor: pointer;
+}
+
+.card__delete {
+  background: transparent url(../images/card-delete.svg) no-repeat;
+  border: none;
+  width: 18px;
+  height: 19px;
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  transition: opacity 0.1s linear 0s;
+  z-index: 1;
+}
+
+.card__delete:hover {
   opacity: 50%;
   cursor: pointer;
 }
