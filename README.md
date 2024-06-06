@@ -11,10 +11,11 @@ This is the third project of the Web Development program at Triple Ten. It was c
 - Desktop and Mobile layouts
 - Flat BEM
 - CSS transform
+- Smooth animations
 
 ## Plan on improving the project
 
-Add annimations to smooth out website
+Add form of saving so card changes don't reset on page refresh
 
 ## Link to website
 
