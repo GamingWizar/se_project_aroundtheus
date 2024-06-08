@@ -1,4 +1,4 @@
-let initialCards = [
+const initialCards = [
   (card0 = {
     name: "Yosemite Valley",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/yosemite.jpg",
@@ -43,7 +43,7 @@ function getCardElement(data) {
   const cardImageDisplay = cardElement.querySelector(".card__image");
   cardElement.querySelector(".card__text").textContent = cardName;
   cardImageDisplay.src = cardImage;
-  cardElement.querySelector(".card__image").alt = cardName;
+  cardImageDisplay.alt = cardName;
   const cardHeart = cardElement.querySelector(".card__heart");
   cardHeart.addEventListener("click", (event) => {
     cardHeart.classList.toggle("card__heart_liked");
