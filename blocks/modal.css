@@ -154,11 +154,11 @@
     height: 30px;
   }
 
-  .modal__close-buttom-image {
+  .modal__close-button-image {
     width: 26px;
   }
 
-  .modal__close-buttom-image_image {
+  .modal__close-button-image_size_large {
     width: 30px;
   }
 }

@@ -27,24 +27,31 @@ const initialCards = [
 
 const cardImageModal = document.querySelector(".modal_modal-type_card-image");
 
-cardImageModal.addEventListener("click", function (event) {
+cardImageModal.addEventListener("mousedown", function (event) {
   if (event.target == cardImageModal) {
     closeModal(cardImageModal);
   }
 });
 
-cardImageModal.addEventListener("keydown", function (event) {
-  if (event.key == "Escape") {
-    closeModal(cardImageModal);
+function escModal(evt) {
+  console.log("Key pressed");
+  if (evt.key == "Escape") {
+    console.log("Escape Pressed");
+    const popup = document.querySelector(".modal_opened");
+    closeModal(popup);
   }
-});
+}
 
 function openModal(popup) {
+  console.log("Modal Opened");
   popup.classList.add("modal_opened");
+  document.addEventListener("keydown", escModal);
 }
 
 function closeModal(popup) {
+  console.log("Modal Closed");
   popup.classList.remove("modal_opened");
+  document.removeEventListener("keydown", escModal);
 }
 
 function getCardElement(data) {
@@ -89,14 +96,8 @@ const profileEditModal = document.querySelector(
   ".modal_modal-type_profile-edit"
 );
 
-profileEditModal.addEventListener("click", function (event) {
+profileEditModal.addEventListener("mousedown", function (event) {
   if (event.target == profileEditModal) {
-    closeModal(profileEditModal);
-  }
-});
-
-profileEditModal.addEventListener("keydown", function (event) {
-  if (event.key == "Escape") {
     closeModal(profileEditModal);
   }
 });
@@ -139,14 +140,8 @@ const cardAdderModalLink = cardAdderModal.querySelector(
   ".modal__input_image-link"
 );
 
-cardAdderModal.addEventListener("click", function (event) {
+cardAdderModal.addEventListener("mousedown", function (event) {
   if (event.target == cardAdderModal) {
-    closeModal(cardAdderModal);
-  }
-});
-
-cardAdderModal.addEventListener("keydown", function (event) {
-  if (event.key == "Escape") {
     closeModal(cardAdderModal);
   }
 });
@@ -170,8 +165,7 @@ function handleCardAdderFormSubmit(event) {
   cardInfo.link = cardAdderModalLink.value;
   const finalCard = getCardElement(cardInfo);
   cardList.prepend(finalCard);
-  cardAdderModalTitle.value = "";
-  cardAdderModalLink.value = "";
+  event.target.reset();
   closeModal(cardAdderModal);
 }
 
