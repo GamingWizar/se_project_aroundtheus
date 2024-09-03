@@ -66,6 +66,7 @@
           />
           <span
             class="modal__input-error modal__input-error_first profile-name-input-error"
+            id="profile-name-input-error"
           ></span>
           <input
             type="text"
@@ -79,6 +80,7 @@
           />
           <span
             class="modal__input-error profile-description-input-error"
+            id="profile-description-input-error"
           ></span>
           <button type="submit" class="modal__submit">Save</button>
           <button type="button" class="modal__close">
@@ -107,6 +109,7 @@
           />
           <span
             class="modal__input-error modal__input-error_first image-title-input-error"
+            id="image-title-input-error"
           ></span>
           <input
             type="url"
@@ -115,7 +118,10 @@
             placeholder="Image link"
             required
           />
-          <span class="modal__input-error image-link-input-error"></span>
+          <span
+            class="modal__input-error image-link-input-error"
+            id="image-link-input-error"
+          ></span>
           <button type="submit" class="modal__submit">Create</button>
           <button type="button" class="modal__close">
             <img
@@ -141,7 +147,8 @@
         <p class="modal__card-image-description"></p>
       </div>
     </div>
-    <script src="./scripts/index.js"></script>
-    <script src="./scripts/validate.js"></script>
+    <script type="module" src="./pages/index.js"></script>
+    <script type="module" src="./componets/FormValidator.js"></script>
+    <script type="module" src="./componets/Card.js"></script>
   </body>
 </html>
