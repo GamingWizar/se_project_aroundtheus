@@ -44,6 +44,7 @@ const formSettings = {
 };
 
 const cardImageModal = document.querySelector(".modal_modal-type_card-image");
+const cardImageModalImage = cardImageModal.querySelector(".modal__card-image");
 
 cardImageModal.addEventListener("mousedown", function (event) {
   if (event.target == cardImageModal) {
@@ -51,7 +52,7 @@ cardImageModal.addEventListener("mousedown", function (event) {
   }
 });
 
-function escModal(evt) {
+function handleEscape(evt) {
   if (evt.key == "Escape") {
     const popup = document.querySelector(".modal_opened");
     closeModal(popup);
@@ -60,32 +61,34 @@ function escModal(evt) {
 
 function openModal(popup) {
   popup.classList.add("modal_opened");
-  document.addEventListener("keydown", escModal);
+  document.addEventListener("keydown", handleEscape);
 }
 
 function closeModal(popup) {
   popup.classList.remove("modal_opened");
-  document.removeEventListener("keydown", escModal);
+  document.removeEventListener("keydown", handleEscape);
 }
 
 const cardList = document.querySelector(".cards");
 
+function createCard(cardData) {
+  const card = new Card(cardData, "cardTemplate", openCardImageModal);
+  return card.generateCard();
+}
+
 function renderCards() {
   initialCards.forEach((item) => {
-    const card = new Card(item, "cardTemplate", openCardImageModal);
-    const cardElement = card.generateCard();
+    const cardElement = createCard(item);
     cardList.append(cardElement);
   });
 }
 renderCards();
 
-function openCardImageModal() {
-  const cardImageModalImage =
-    cardImageModal.querySelector(".modal__card-image");
-  cardImageModalImage.src = this._image;
-  cardImageModalImage.alt = this._image;
+function openCardImageModal(cardText, cardImage) {
+  cardImageModalImage.src = cardImage;
+  cardImageModalImage.alt = cardText;
   cardImageModal.querySelector(".modal__card-image-description").textContent =
-    this._text;
+    cardText;
   openModal(cardImageModal);
 }
 
@@ -96,7 +99,7 @@ cardImageModal
   });
 
 //////////////////// Profile Edit Form
-const profileEditForm = document.querySelector("#profile-edit__form");
+const profileEditForm = document.forms["profile-edit__form"];
 const profileEditFormValidation = new FormValidator(
   formSettings,
   profileEditForm
@@ -108,7 +111,6 @@ function handleProfileFormSubmit(event) {
   profileName.textContent = profileModalName.value;
   profileDecsription.textContent = profileModalDescription.value;
   closeModal(profileEditModal);
-  profileEditFormValidation.resetValidation();
 }
 profileEditForm.addEventListener("submit", handleProfileFormSubmit);
 
@@ -159,12 +161,11 @@ function handleCardAdderFormSubmit(event) {
   const cardInfo = { text: "", image: "" };
   cardInfo.text = cardAdderModalTitle.value;
   cardInfo.image = cardAdderModalLink.value;
-  const newCard = new Card(cardInfo, "cardTemplate", openCardImageModal);
-  const finalCard = newCard.generateCard();
-  cardList.prepend(finalCard);
+  const newCard = createCard(cardInfo);
+  cardList.prepend(newCard);
   event.target.reset();
   closeModal(cardAdderModal);
-  cardAdderFormValidation.resetValidation();
+  cardAdderFormValidation.resetValidation(); ////////////////////
 }
 cardAdderForm.addEventListener("submit", handleCardAdderFormSubmit);
 
