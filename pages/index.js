@@ -1,5 +1,6 @@
 import { Card } from "../componets/Card.js";
 import { FormValidator } from "../componets/FormValidator.js";
+import Section from "../componets/Section.js";
 
 const initialCards = [
   {
@@ -69,20 +70,34 @@ function closeModal(popup) {
   document.removeEventListener("keydown", handleEscape);
 }
 
-const cardList = document.querySelector(".cards");
+const cardListLocation = document.querySelector(".cards");
 
 function createCard(cardData) {
   const card = new Card(cardData, "cardTemplate", openCardImageModal);
   return card.generateCard();
 }
 
-function renderCards() {
+function getInitialCards() {
+  const cards = [];
   initialCards.forEach((item) => {
     const cardElement = createCard(item);
-    cardList.append(cardElement);
+    cards.push(cardElement);
   });
+  return cards;
 }
-renderCards();
+
+function renderCards(element, elementList) {
+  elementList.append(element);
+}
+
+const CardList = new Section(
+  {
+    items: getInitialCards(),
+    renderer: renderCards,
+  },
+  cardListLocation
+);
+CardList.renderItems();
 
 function openCardImageModal(cardText, cardImage) {
   cardImageModalImage.src = cardImage;
@@ -161,11 +176,12 @@ function handleCardAdderFormSubmit(event) {
   const cardInfo = { text: "", image: "" };
   cardInfo.text = cardAdderModalTitle.value;
   cardInfo.image = cardAdderModalLink.value;
+  //
   const newCard = createCard(cardInfo);
-  cardList.prepend(newCard);
+  CardList.addItem(newCard);
   event.target.reset();
   closeModal(cardAdderModal);
-  cardAdderFormValidation.resetValidation(); ////////////////////
+  cardAdderFormValidation.resetValidation();
 }
 cardAdderForm.addEventListener("submit", handleCardAdderFormSubmit);
 
