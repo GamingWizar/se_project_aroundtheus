@@ -12,6 +12,8 @@ This is the third project of the Web Development program at Triple Ten. It was c
 - Flat BEM
 - CSS transform
 - Smooth animations
+- JS Classes
+- Webpack bundling
 
 ## Plan on improving the project
 
