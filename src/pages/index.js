@@ -32,7 +32,7 @@ function getInitialCards() {
 }
 
 function renderCards(element, elementList) {
-  elementList.append(element);
+  elementList.prepend(element);
 }
 
 const CardList = new Section(
@@ -89,6 +89,9 @@ profile
   });
 
 ///////////////////////// Card Adder Form
+const cardAdderForm = document.querySelector("#add-card__form");
+const cardAdderFormValidation = new FormValidator(formSettings, cardAdderForm);
+cardAdderFormValidation.enableValidation();
 
 function handleCardAdderFormSubmit(inputValues) {
   const newCard = createCard({
@@ -105,10 +108,6 @@ const cardAdderModal = new PopupWithForm(
   handleCardAdderFormSubmit
 );
 cardAdderModal.setEventListeners();
-
-const cardAdderForm = document.querySelector("#add-card__form");
-const cardAdderFormValidation = new FormValidator(formSettings, cardAdderForm);
-cardAdderFormValidation.enableValidation();
 
 profile.querySelector(".profile__add").addEventListener("click", (event) => {
   cardAdderModal.open();
