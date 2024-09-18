@@ -35,14 +35,14 @@ function renderCards(element, elementList) {
   elementList.prepend(element);
 }
 
-const CardList = new Section(
+const cardList = new Section(
   {
     items: getInitialCards(),
     renderer: renderCards,
   },
   cardListLocation
 );
-CardList.renderItems();
+cardList.renderItems();
 
 //////////////////// Profile Edit Form
 
@@ -98,7 +98,7 @@ function handleCardAdderFormSubmit(inputValues) {
     text: inputValues.title,
     image: inputValues.link,
   });
-  CardList.addItem(newCard);
+  cardList.addItem(newCard);
   cardAdderModal.close();
   cardAdderFormValidation.resetValidation();
 }

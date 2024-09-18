@@ -19,7 +19,6 @@ export default class Popup {
   setEventListeners() {
     this._popup.addEventListener("click", (evt) => {
       if (
-        evt.target == this._popup.querySelector(".modal__close") ||
         evt.target == this._popup.querySelector(".modal__close-button-image")
       ) {
         this.close();
