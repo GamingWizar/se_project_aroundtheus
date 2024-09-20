@@ -39,3 +39,5 @@ export const formSettings = {
   inputErrorClass: "modal__input_type_error",
   errorClass: "modal__error_visible",
 };
+
+export const token = "dabb2dc3-6cd3-46ae-8531-cd3fe2c46f7a";

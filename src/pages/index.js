@@ -4,8 +4,42 @@ import Section from "../componets/Section.js";
 import PopupWithImage from "../componets/PopupWithImage.js";
 import PopupWithForm from "../componets/PopupWithForm.js";
 import UserInfo from "../componets/UserInfo.js";
-import { initialCards, formSettings } from "../utils/constants.js";
+import { initialCards, formSettings, token } from "../utils/constants.js";
 import "./index.css";
+import Api from "../componets/Api.js";
+
+// Profile consts
+const profile = document.querySelector(".profile");
+const profileName = profile.querySelector(".profile__name");
+const profileDecsription = profile.querySelector(".profile__description");
+const profileAvatar = profile.querySelector(".profile__avatar");
+
+const profileInfo = new UserInfo({
+  name: profileName,
+  description: profileDecsription,
+  avatar: profileAvatar,
+});
+
+const api = new Api({ token: token });
+api
+  .getUserInfo()
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Error: ${res.status} User Info not found`);
+    }
+  })
+  .then((json) => {
+    profileInfo.setUserInfo({
+      name: json.name,
+      description: json.about,
+      avatar: json.avatar,
+    });
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 const cardImageModal = new PopupWithImage(
   document.querySelector(".modal_modal-type_card-image")
@@ -46,17 +80,25 @@ cardList.renderItems();
 
 //////////////////// Profile Edit Form
 
-const profile = document.querySelector(".profile");
-const profileName = profile.querySelector(".profile__name");
-const profileDecsription = profile.querySelector(".profile__description");
-
-const profileInfo = new UserInfo({
-  name: profileName,
-  description: profileDecsription,
-});
-
 function handleProfileFormSubmit(inputValues) {
-  profileInfo.setUserInfo(inputValues);
+  api
+    .updateUserInfo(inputValues)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        return Promise.reject(
+          `Error: ${res.status} Couldn't update profile info`
+        );
+      }
+    })
+    .then((res) => {
+      profileInfo.setUserInfo({ name: res.name, description: res.about });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
   profileEditModal.close();
 }
 
