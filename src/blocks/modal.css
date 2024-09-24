@@ -25,6 +25,12 @@
   position: relative;
 }
 
+.modal__wrapper {
+  margin: 34px 36px 36px 36px;
+  display: flex;
+  flex-direction: column;
+}
+
 .modal__card-image {
   max-width: 75vw;
   max-height: 75vh;

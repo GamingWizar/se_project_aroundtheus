@@ -1,9 +1,18 @@
 export class Card {
-  constructor(data, cardSelector, handleImageClick) {
-    this._text = data.text;
-    this._image = data.image;
+  constructor(
+    { name, link, _id },
+    cardSelector,
+    handleImageClick,
+    openConfirmDelete,
+    handleDeleteCard
+  ) {
+    this._text = name;
+    this._image = link;
+    this._id = _id;
     this._cardSelector = cardSelector;
     this._handleImageClick = handleImageClick;
+    this._openConfirmDelete = openConfirmDelete;
+    this._handleDeleteCard = handleDeleteCard;
   }
 
   _getCardTemplate() {
@@ -34,8 +43,12 @@ export class Card {
   _deleteButtonHandler() {
     this._cardDelete = this._element.querySelector(".card__delete");
     this._cardDelete.addEventListener("click", () => {
-      this._element.remove();
+      this._openConfirmDelete(this);
     });
+  }
+
+  deleteCard() {
+    this._handleDeleteCard(this._id, this._element);
   }
 
   generateCard() {

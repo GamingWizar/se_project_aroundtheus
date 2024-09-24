@@ -107,7 +107,7 @@
             type="text"
             class="modal__input modal__input-first modal__input_title"
             id="image-title-input"
-            name="title"
+            name="name"
             placeholder="Title"
             required
             minlength="1"
@@ -152,6 +152,22 @@
           />
         </button>
         <p class="modal__card-image-description"></p>
+      </div>
+    </div>
+    <!-- Confirm Delete Modal -->
+    <div class="modal modal_modal-type_confirm-delete">
+      <div class="modal__container">
+        <div class="modal__wrapper">
+          <h2 class="modal__title">Are you sure?</h2>
+          <button type="button" class="modal__submit">Yes</button>
+          <button type="button" class="modal__close modal__image-close">
+            <img
+              class="modal__close-button-image modal__close-button-image_size_large"
+              src="<%=require('./images/close.svg')%>"
+              alt="Close"
+            />
+          </button>
+        </div>
       </div>
     </div>
   </body>

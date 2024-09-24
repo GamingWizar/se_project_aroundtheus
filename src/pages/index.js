@@ -3,8 +3,9 @@ import { FormValidator } from "../componets/FormValidator.js";
 import Section from "../componets/Section.js";
 import PopupWithImage from "../componets/PopupWithImage.js";
 import PopupWithForm from "../componets/PopupWithForm.js";
+import PopupWithConfirmation from "../componets/PopupWithConfirmtaion.js";
 import UserInfo from "../componets/UserInfo.js";
-import { initialCards, formSettings, token } from "../utils/constants.js";
+import { formSettings, token } from "../utils/constants.js";
 import "./index.css";
 import Api from "../componets/Api.js";
 
@@ -20,49 +21,56 @@ const profileInfo = new UserInfo({
   avatar: profileAvatar,
 });
 
-const api = new Api({ token: token });
-api
-  .getUserInfo()
-  .then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Error: ${res.status} User Info not found`);
-    }
-  })
-  .then((json) => {
-    profileInfo.setUserInfo({
-      name: json.name,
-      description: json.about,
-      avatar: json.avatar,
+// Cards and Cardlist
+const cardListLocation = document.querySelector(".cards");
+
+function deleteCard(cardId, card) {
+  api
+    .deleteCard(cardId)
+    .then((res) => {
+      if (res.ok) {
+        return card.remove();
+      } else {
+        return Promise.reject(res.status);
+      }
+    })
+    .catch((err) => {
+      console.error(`ERROR: Failed to delete card: ${err}`);
     });
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+}
+
+function confirmCardDelete(card) {
+  card.deleteCard();
+}
+
+const cardDeleteModal = new PopupWithConfirmation(
+  document.querySelector(".modal_modal-type_confirm-delete"),
+  confirmCardDelete
+);
+cardDeleteModal.setEventListeners();
 
 const cardImageModal = new PopupWithImage(
   document.querySelector(".modal_modal-type_card-image")
 );
 cardImageModal.setEventListeners();
-const cardListLocation = document.querySelector(".cards");
 
 function openCardModal(cardText, cardSrc) {
   cardImageModal.open(cardText, cardSrc);
 }
 
-function createCard(cardData) {
-  const card = new Card(cardData, "cardTemplate", openCardModal);
-  return card.generateCard();
+function opencardDeleteModal(card) {
+  cardDeleteModal.open(card);
 }
 
-function getInitialCards() {
-  const cards = [];
-  initialCards.forEach((item) => {
-    const cardElement = createCard(item);
-    cards.push(cardElement);
-  });
-  return cards;
+function createCard(cardData) {
+  const card = new Card(
+    cardData,
+    "cardTemplate",
+    openCardModal,
+    opencardDeleteModal,
+    deleteCard
+  );
+  return card.generateCard();
 }
 
 function renderCards(element, elementList) {
@@ -71,12 +79,52 @@ function renderCards(element, elementList) {
 
 const cardList = new Section(
   {
-    items: getInitialCards(),
+    items: [],
     renderer: renderCards,
   },
   cardListLocation
 );
-cardList.renderItems();
+
+// API
+function setInitialUserInfo(res) {
+  return res.then((json) => {
+    profileInfo.setUserInfo({
+      name: json.name,
+      description: json.about,
+      avatar: json.avatar,
+    });
+  });
+}
+
+function setInitialCards(res) {
+  return res.then((json) => {
+    const cards = [];
+    json.forEach((card) => {
+      const cardElement = createCard(card);
+      cards.push(cardElement);
+    });
+    cardList.setItems(cards);
+    cardList.renderItems();
+  });
+}
+
+const api = new Api({ token: token });
+api
+  .initialize()
+  .then((resArr) => {
+    if (resArr[0].ok && resArr[1].ok) {
+      return (
+        setInitialUserInfo(resArr[0].json()) + setInitialCards(resArr[1].json())
+      );
+    } else {
+      return Promise.reject(
+        `Failed to Initialize: User Info Status: ${resArr[0].status} Card List Status: ${resArr[1].status}`
+      );
+    }
+  })
+  .catch((err) => {
+    console.error(`ERROR: ${err}`);
+  });
 
 //////////////////// Profile Edit Form
 
@@ -136,13 +184,24 @@ const cardAdderFormValidation = new FormValidator(formSettings, cardAdderForm);
 cardAdderFormValidation.enableValidation();
 
 function handleCardAdderFormSubmit(inputValues) {
-  const newCard = createCard({
-    text: inputValues.title,
-    image: inputValues.link,
-  });
-  cardList.addItem(newCard);
-  cardAdderModal.close();
-  cardAdderFormValidation.resetValidation();
+  api
+    .createCard(inputValues)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        return Promise.reject(res.status);
+      }
+    })
+    .then((json) => {
+      const newCard = createCard(json);
+      cardList.addItem(newCard);
+      cardAdderModal.close();
+      cardAdderFormValidation.resetValidation();
+    })
+    .catch((err) => {
+      console.error(`ERROR: Failed to generate new card: ${err}`);
+    });
 }
 
 const cardAdderModal = new PopupWithForm(

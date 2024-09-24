@@ -33,11 +33,37 @@ export default class Api {
     });
   }
 
-  createCard() {}
+  createCard({ name, link }) {
+    return fetch("https://around-api.en.tripleten-services.com/v1/cards", {
+      method: "POST",
+      headers: {
+        authorization: this._token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        link: link,
+      }),
+    });
+  }
 
-  deleteCard() {}
+  deleteCard(cardId) {
+    return fetch(
+      `https://around-api.en.tripleten-services.com/v1/cards/${cardId}`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: this._token,
+        },
+      }
+    );
+  }
 
   addCardLike() {}
 
   removeCardLike() {}
+
+  initialize() {
+    return Promise.all([this.getUserInfo(), this.getInitialCards()]);
+  }
 }
