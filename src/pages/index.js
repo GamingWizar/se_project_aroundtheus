@@ -112,8 +112,8 @@ function setInitialUserInfo(res) {
     profileInfo.setUserInfo({
       name: json.name,
       description: json.about,
-      avatar: json.avatar,
     });
+    profileInfo.setUserAvatar({ link: json.avatar });
   });
 }
 
@@ -122,7 +122,7 @@ function setInitialCards(res) {
     const cards = [];
     json.forEach((card) => {
       const cardElement = createCard(card);
-      cards.push(cardElement);
+      cards.unshift(cardElement);
     });
     cardList.setItems(cards);
     cardList.renderItems();
@@ -175,8 +175,8 @@ const profileEditModal = new PopupWithForm(
   document.querySelector(".modal_modal-type_profile-edit"),
   handleProfileFormSubmit
 );
-
 profileEditModal.setEventListeners();
+
 const profileEditFormValidation = new FormValidator(
   formSettings,
   document.forms["profile-edit__form"]
@@ -198,6 +198,35 @@ profile
     profileModalDescription.value = info.description;
     profileEditFormValidation.resetValidation();
   });
+
+//////////////////////// Avatar Edit Form
+
+function handleAvatarFormSubmit(inputValues) {
+  api.updateUserAvatar(inputValues).then((res) => {
+    if (res.ok) {
+      profileInfo.setUserAvatar(inputValues);
+    } else {
+      return Promise.reject(`Failed to update Avatar: ${res.status}`);
+    }
+  });
+  avatarEditModal.close();
+}
+
+const avatarEditModal = new PopupWithForm(
+  document.querySelector(".modal_modal-type_avatar-edit"),
+  handleAvatarFormSubmit
+);
+avatarEditModal.setEventListeners();
+
+const avatarEditFormValidation = new FormValidator(
+  formSettings,
+  document.forms["avatar-edit__form"]
+);
+avatarEditFormValidation.enableValidation();
+
+profile.querySelector(".profile__avatar-edit").addEventListener("click", () => {
+  avatarEditModal.open();
+});
 
 ///////////////////////// Card Adder Form
 const cardAdderForm = document.querySelector("#add-card__form");

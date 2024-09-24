@@ -56,6 +56,10 @@
   margin-bottom: 54px;
 }
 
+.modal__confirm-title {
+  margin-bottom: 38px;
+}
+
 .modal__input {
   padding: 0;
   border: none;
@@ -92,6 +96,10 @@
   height: 50px;
   font-size: 18px;
   font-weight: 400;
+}
+
+.modal__confirm-submit {
+  margin-top: 0px;
 }
 
 .modal__submit:hover {

@@ -23,7 +23,21 @@ export default class Api {
     });
   }
 
-  updateUserAvatar() {}
+  updateUserAvatar({ link }) {
+    return fetch(
+      "https://around-api.en.tripleten-services.com/v1/users/me/avatar",
+      {
+        method: "PATCH",
+        headers: {
+          authorization: this._token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          avatar: link,
+        }),
+      }
+    );
+  }
 
   getInitialCards() {
     return fetch("https://around-api.en.tripleten-services.com/v1/cards", {
