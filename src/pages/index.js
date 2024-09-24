@@ -39,6 +39,26 @@ function deleteCard(cardId, card) {
     });
 }
 
+function handleCardLike(isLiked, cardId) {
+  if (isLiked) {
+    return api.removeCardLike(cardId).then((res) => {
+      if (res.ok) {
+        return Promise.resolve();
+      } else {
+        return Promise.reject(`Failed to remove like: ${res.status}`);
+      }
+    });
+  } else {
+    return api.addCardLike(cardId).then((res) => {
+      if (res.ok) {
+        return Promise.resolve();
+      } else {
+        return Promise.reject(`Failed to add like: ${res.status}`);
+      }
+    });
+  }
+}
+
 function confirmCardDelete(card) {
   card.deleteCard();
 }
@@ -68,7 +88,8 @@ function createCard(cardData) {
     "cardTemplate",
     openCardModal,
     opencardDeleteModal,
-    deleteCard
+    deleteCard,
+    handleCardLike
   );
   return card.generateCard();
 }

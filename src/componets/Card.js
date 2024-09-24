@@ -1,18 +1,21 @@
 export class Card {
   constructor(
-    { name, link, _id },
+    { name, link, _id, isLiked },
     cardSelector,
     handleImageClick,
     openConfirmDelete,
-    handleDeleteCard
+    handleDeleteCard,
+    handleLikeFunction
   ) {
     this._text = name;
     this._image = link;
     this._id = _id;
+    this._startsLiked = isLiked;
     this._cardSelector = cardSelector;
     this._handleImageClick = handleImageClick;
     this._openConfirmDelete = openConfirmDelete;
     this._handleDeleteCard = handleDeleteCard;
+    this._handleLikeFunction = handleLikeFunction;
   }
 
   _getCardTemplate() {
@@ -36,7 +39,16 @@ export class Card {
   _likeButtonHandler() {
     this._cardHeart = this._element.querySelector(".card__heart");
     this._cardHeart.addEventListener("click", () => {
-      this._cardHeart.classList.toggle("card__heart_liked");
+      this._handleLikeFunction(
+        this._cardHeart.classList.contains("card__heart_liked"),
+        this._id
+      )
+        .then(() => {
+          this._cardHeart.classList.toggle("card__heart_liked");
+        })
+        .catch((err) => {
+          console.error(`ERROR: ${err}`);
+        });
     });
   }
 
@@ -51,9 +63,16 @@ export class Card {
     this._handleDeleteCard(this._id, this._element);
   }
 
+  _handleStartLiked() {
+    if (this._startsLiked) {
+      this._cardHeart.classList.add("card__heart_liked");
+    }
+  }
+
   generateCard() {
     this._element = this._getCardTemplate();
     this._setEventListeners();
+    this._handleStartLiked();
     this._element.querySelector(".card__text").textContent = this._text;
     this._elementImage.src = this._image;
     this._elementImage.alt = this._text;

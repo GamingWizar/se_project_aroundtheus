@@ -59,9 +59,29 @@ export default class Api {
     );
   }
 
-  addCardLike() {}
+  addCardLike(cardId) {
+    return fetch(
+      `https://around-api.en.tripleten-services.com/v1/cards/${cardId}/likes`,
+      {
+        method: "PUT",
+        headers: {
+          authorization: this._token,
+        },
+      }
+    );
+  }
 
-  removeCardLike() {}
+  removeCardLike(cardId) {
+    return fetch(
+      `https://around-api.en.tripleten-services.com/v1/cards/${cardId}/likes`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: this._token,
+        },
+      }
+    );
+  }
 
   initialize() {
     return Promise.all([this.getUserInfo(), this.getInitialCards()]);
