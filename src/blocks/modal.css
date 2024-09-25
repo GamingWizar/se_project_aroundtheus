@@ -25,6 +25,12 @@
   position: relative;
 }
 
+.modal__wrapper {
+  margin: 34px 36px 36px 36px;
+  display: flex;
+  flex-direction: column;
+}
+
 .modal__card-image {
   max-width: 75vw;
   max-height: 75vh;
@@ -48,6 +54,10 @@
   font-weight: 900;
   margin-top: 0;
   margin-bottom: 54px;
+}
+
+.modal__confirm-title {
+  margin-bottom: 38px;
 }
 
 .modal__input {
@@ -86,6 +96,10 @@
   height: 50px;
   font-size: 18px;
   font-weight: 400;
+}
+
+.modal__confirm-submit {
+  margin-top: 0px;
 }
 
 .modal__submit:hover {

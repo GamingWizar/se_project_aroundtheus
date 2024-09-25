@@ -6,8 +6,38 @@
 
 .profile__avatar {
   height: 120px;
+  width: 120px;
   border-radius: 50%;
+}
+
+.profile__cover-wrapper {
+  height: 120px;
   margin-right: 30px;
+  position: relative;
+}
+
+.profile__cover-wrapper:hover .profile__avatar-cover {
+  opacity: 20%;
+}
+
+.profile__avatar-edit {
+  z-index: 1;
+  visibility: hidden;
+  background: transparent url(../images/edit-avatar.svg) no-repeat;
+  border: none;
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  top: 47px;
+  right: 47px;
+}
+
+.profile__cover-wrapper:hover .profile__avatar-edit {
+  visibility: visible;
+}
+
+.profile__avatar-edit:hover {
+  cursor: pointer;
 }
 
 .profile__info {

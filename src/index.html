@@ -16,15 +16,16 @@
     </header>
     <div class="page__content">
       <section class="profile page__section">
-        <img
-          class="profile__avatar"
-          src="<%=require('./images/jacques-cousteau.jpg')%>"
-          alt="Profile Picture"
-        />
+        <div class="profile__cover-wrapper">
+          <button class="profile__avatar-edit" type="button"></button>
+          <div class="profile__avatar-cover">
+            <img class="profile__avatar" src="" alt="Profile Picture" />
+          </div>
+        </div>
         <div class="profile__info">
-          <h1 class="profile__name">Jacques Cousteau</h1>
+          <h1 class="profile__name">Name</h1>
           <button class="profile__edit" type="button"></button>
-          <h2 class="profile__description">Explorer</h2>
+          <h2 class="profile__description">Description</h2>
         </div>
         <button class="profile__add" type="button">
           <img
@@ -98,6 +99,34 @@
         </form>
       </div>
     </div>
+    <!-- Avatar Edit Modal -->
+    <div class="modal modal_modal-type_avatar-edit">
+      <div class="modal__container">
+        <form class="modal__form" id="avatar-edit__form" novalidate>
+          <h2 class="modal__title">Change Profile Picture</h2>
+          <input
+            type="url"
+            class="modal__input modal__input-first modal__input_link"
+            id="avatar-edit-input"
+            placeholder="Link"
+            name="link"
+            required
+          />
+          <span
+            class="modal__input-error modal__input-error_first avatar-edit-input-error"
+            id="avatar-edit-input-error"
+          ></span>
+          <button type="submit" class="modal__submit">Save</button>
+          <button type="button" class="modal__close">
+            <img
+              class="modal__close-button-image"
+              src="<%=require('./images/close.svg')%>"
+              alt="Close"
+            />
+          </button>
+        </form>
+      </div>
+    </div>
     <!-- Card Adder Modal -->
     <div class="modal modal_modal-type_card-adder">
       <div class="modal__container">
@@ -107,7 +136,7 @@
             type="text"
             class="modal__input modal__input-first modal__input_title"
             id="image-title-input"
-            name="title"
+            name="name"
             placeholder="Title"
             required
             minlength="1"
@@ -152,6 +181,24 @@
           />
         </button>
         <p class="modal__card-image-description"></p>
+      </div>
+    </div>
+    <!-- Confirm Delete Modal -->
+    <div class="modal modal_modal-type_confirm-delete">
+      <div class="modal__container">
+        <div class="modal__wrapper">
+          <h2 class="modal__title modal__confirm-title">Are you sure?</h2>
+          <button type="button" class="modal__submit modal__confirm-submit">
+            Yes
+          </button>
+          <button type="button" class="modal__close modal__image-close">
+            <img
+              class="modal__close-button-image modal__close-button-image_size_large"
+              src="<%=require('./images/close.svg')%>"
+              alt="Close"
+            />
+          </button>
+        </div>
       </div>
     </div>
   </body>

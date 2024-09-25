@@ -5,6 +5,10 @@ export default class Section {
     this._itemContainer = itemContainer;
   }
 
+  setItems(items) {
+    this._initialItems = items;
+  }
+
   renderItems() {
     this._initialItems.forEach((item) => {
       this.addItem(item);
