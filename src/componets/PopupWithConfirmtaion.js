@@ -8,8 +8,16 @@ export default class PopupWithConfirmation extends Popup {
     this._confirmButtonText = this._confirmButton.textContent;
   }
 
+  renderLoading(isLoading, loadingText = "Deleting...") {
+    if (isLoading) {
+      this._confirmButton.textContent = loadingText;
+    } else {
+      this._confirmButton.textContent = this._confirmButtonText;
+    }
+  }
+
   handleButtonSaving() {
-    this._confirmButton.textContent = "Saving...";
+    this._confirmButton.textContent = "Deleting...";
   }
 
   resetConfirmButtonText() {
@@ -32,7 +40,7 @@ export default class PopupWithConfirmation extends Popup {
   setEventListeners() {
     super.setEventListeners();
     this._confirmButton.addEventListener("click", () => {
-      this.handleButtonSaving();
+      this.renderLoading(true);
       this._runConfirmFunction();
     });
   }

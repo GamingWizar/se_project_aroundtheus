@@ -1,21 +1,30 @@
 export default class Api {
-  constructor({ token }) {
-    this._token = token;
+  constructor({ baseUrl, headers }) {
+    this._baseUrl = baseUrl;
+    this._headers = headers;
   }
+
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(res.status);
+    }
+  }
+
+  _request(url, options) {
+    return fetch(`${this._baseUrl}${url}`, options).then(this._checkResponse);
+  }
+
   getUserInfo() {
-    return fetch("https://around-api.en.tripleten-services.com/v1/users/me", {
-      headers: {
-        authorization: this._token,
-      },
+    return this._request("/users/me", {
+      headers: this._headers,
     });
   }
   updateUserInfo({ name, description }) {
-    return fetch("https://around-api.en.tripleten-services.com/v1/users/me", {
+    return this._request("/users/me", {
       method: "PATCH",
-      headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
-      },
+      headers: this._headers,
       body: JSON.stringify({
         name: name,
         about: description,
@@ -24,36 +33,25 @@ export default class Api {
   }
 
   updateUserAvatar({ link }) {
-    return fetch(
-      "https://around-api.en.tripleten-services.com/v1/users/me/avatar",
-      {
-        method: "PATCH",
-        headers: {
-          authorization: this._token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          avatar: link,
-        }),
-      }
-    );
+    return this._request("/users/me/avatar", {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: link,
+      }),
+    });
   }
 
   getInitialCards() {
-    return fetch("https://around-api.en.tripleten-services.com/v1/cards", {
-      headers: {
-        authorization: this._token,
-      },
+    return this._request("/cards", {
+      headers: this._headers,
     });
   }
 
   createCard({ name, link }) {
-    return fetch("https://around-api.en.tripleten-services.com/v1/cards", {
+    return this._request("/cards", {
       method: "POST",
-      headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
-      },
+      headers: this._headers,
       body: JSON.stringify({
         name: name,
         link: link,
@@ -62,39 +60,24 @@ export default class Api {
   }
 
   deleteCard(cardId) {
-    return fetch(
-      `https://around-api.en.tripleten-services.com/v1/cards/${cardId}`,
-      {
-        method: "DELETE",
-        headers: {
-          authorization: this._token,
-        },
-      }
-    );
+    return this._request(`/cards/${cardId}`, {
+      method: "DELETE",
+      headers: this._headers,
+    });
   }
 
   addCardLike(cardId) {
-    return fetch(
-      `https://around-api.en.tripleten-services.com/v1/cards/${cardId}/likes`,
-      {
-        method: "PUT",
-        headers: {
-          authorization: this._token,
-        },
-      }
-    );
+    return this._request(`/cards/${cardId}/likes`, {
+      method: "PUT",
+      headers: this._headers,
+    });
   }
 
   removeCardLike(cardId) {
-    return fetch(
-      `https://around-api.en.tripleten-services.com/v1/cards/${cardId}/likes`,
-      {
-        method: "DELETE",
-        headers: {
-          authorization: this._token,
-        },
-      }
-    );
+    return this._request(`/cards/${cardId}/likes`, {
+      method: "DELETE",
+      headers: this._headers,
+    });
   }
 
   initialize() {

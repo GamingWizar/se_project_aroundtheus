@@ -27,13 +27,9 @@ const cardListLocation = document.querySelector(".cards");
 function deleteCard(cardId, card) {
   return api
     .deleteCard(cardId)
-    .then((res) => {
-      if (res.ok) {
-        card.remove();
-        return Promise.resolve();
-      } else {
-        return Promise.reject(res.status);
-      }
+    .then(() => {
+      card.remove();
+      cardDeleteModal.close();
     })
     .catch((err) => {
       console.error(`ERROR: Failed to delete card: ${err}`);
@@ -42,28 +38,19 @@ function deleteCard(cardId, card) {
 
 function handleCardLike(isLiked, cardId) {
   if (isLiked) {
-    return api.removeCardLike(cardId).then((res) => {
-      if (res.ok) {
-        return Promise.resolve();
-      } else {
-        return Promise.reject(`Failed to remove like: ${res.status}`);
-      }
+    return api.removeCardLike(cardId).catch((err) => {
+      return Promise.reject(`Failed to remove like: ${err}`);
     });
   } else {
-    return api.addCardLike(cardId).then((res) => {
-      if (res.ok) {
-        return Promise.resolve();
-      } else {
-        return Promise.reject(`Failed to add like: ${res.status}`);
-      }
+    return api.addCardLike(cardId).catch((err) => {
+      return Promise.reject(`Failed to add like: ${err}`);
     });
   }
 }
 
 function confirmCardDelete(card) {
   card.deleteCard().finally(() => {
-    cardDeleteModal.close();
-    cardDeleteModal.resetConfirmButtonText();
+    cardDeleteModal.renderLoading(false);
   });
 }
 
@@ -111,44 +98,40 @@ const cardList = new Section(
 );
 
 // API
-function setInitialUserInfo(res) {
-  return res.then((json) => {
-    profileInfo.setUserInfo({
-      name: json.name,
-      description: json.about,
-    });
-    profileInfo.setUserAvatar({ link: json.avatar });
+function setInitialUserInfo(json) {
+  profileInfo.setUserInfo({
+    name: json.name,
+    description: json.about,
   });
+  profileInfo.setUserAvatar({ link: json.avatar });
 }
 
-function setInitialCards(res) {
-  return res.then((json) => {
-    const cards = [];
-    json.forEach((card) => {
-      const cardElement = createCard(card);
-      cards.unshift(cardElement);
-    });
-    cardList.setItems(cards);
-    cardList.renderItems();
+function setInitialCards(json) {
+  const cards = [];
+  json.forEach((card) => {
+    const cardElement = createCard(card);
+    cards.unshift(cardElement);
   });
+  cardList.setItems(cards);
+  cardList.renderItems();
 }
 
-const api = new Api({ token: token });
+const api = new Api({
+  baseUrl: "https://around-api.en.tripleten-services.com/v1",
+  headers: {
+    authorization: token,
+    "Content-Type": "application/json",
+  },
+});
 api
   .initialize()
   .then((resArr) => {
-    if (resArr[0].ok && resArr[1].ok) {
-      return (
-        setInitialUserInfo(resArr[0].json()) + setInitialCards(resArr[1].json())
-      );
-    } else {
-      return Promise.reject(
-        `Failed to Initialize: User Info Status: ${resArr[0].status} Card List Status: ${resArr[1].status}`
-      );
-    }
+    return setInitialUserInfo(resArr[0]) + setInitialCards(resArr[1]);
   })
   .catch((err) => {
-    console.error(`ERROR: ${err}`);
+    console.error(
+      `ERROR: Failed to Initialize: User Info Status: ${err[0]} Card List Status: ${err[1]}`
+    );
   });
 
 //////////////////// Profile Edit Form
@@ -157,23 +140,15 @@ function handleProfileFormSubmit(inputValues) {
   api
     .updateUserInfo(inputValues)
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(
-          `Error: ${res.status} Couldn't update profile info`
-        );
-      }
-    })
-    .then((res) => {
       profileInfo.setUserInfo({ name: res.name, description: res.about });
+      profileEditModal.close();
+      profileEditModal.setInputValues({ name: "", description: "" });
     })
     .catch((err) => {
-      console.error(err);
+      console.error(`Error: ${err} Couldn't update profile info`);
     })
     .finally(() => {
-      profileEditModal.close();
-      profileEditModal.resetSubmitButtonText();
+      profileEditModal.renderLoading(false);
     });
 }
 
@@ -185,7 +160,7 @@ profileEditModal.setEventListeners();
 
 const profileEditFormValidation = new FormValidator(
   formSettings,
-  document.forms["profile-edit__form"]
+  profileEditModal.getForm()
 );
 profileEditFormValidation.enableValidation();
 
@@ -198,11 +173,13 @@ const profileModalDescription = profileEditModal._popup.querySelector(
 profile
   .querySelector(".profile__edit")
   .addEventListener("click", function (event) {
-    profileEditModal.open();
     const info = profileInfo.getUserInfo();
-    profileModalName.value = info.name;
-    profileModalDescription.value = info.description;
+    profileEditModal.setInputValues({
+      name: info.name,
+      description: info.description,
+    });
     profileEditFormValidation.resetValidation();
+    profileEditModal.open();
   });
 
 //////////////////////// Avatar Edit Form
@@ -210,16 +187,16 @@ profile
 function handleAvatarFormSubmit(inputValues) {
   api
     .updateUserAvatar(inputValues)
-    .then((res) => {
-      if (res.ok) {
-        profileInfo.setUserAvatar(inputValues);
-      } else {
-        return Promise.reject(`Failed to update Avatar: ${res.status}`);
-      }
+    .then(() => {
+      profileInfo.setUserAvatar(inputValues);
+      avatarEditModal.close();
+      avatarEditModal.setInputValues({ link: "" });
+    })
+    .catch((err) => {
+      console.error(`ERROR: Failed to update Avatar: ${err}`);
     })
     .finally(() => {
-      avatarEditModal.close();
-      avatarEditModal.resetSubmitButtonText();
+      avatarEditModal.renderLoading(false);
       avatarEditFormValidation.resetValidation();
     });
 }
@@ -232,7 +209,7 @@ avatarEditModal.setEventListeners();
 
 const avatarEditFormValidation = new FormValidator(
   formSettings,
-  document.forms["avatar-edit__form"]
+  avatarEditModal.getForm()
 );
 avatarEditFormValidation.enableValidation();
 
@@ -241,32 +218,21 @@ profile.querySelector(".profile__avatar-edit").addEventListener("click", () => {
 });
 
 ///////////////////////// Card Adder Form
-const cardAdderForm = document.querySelector("#add-card__form");
-const cardAdderFormValidation = new FormValidator(formSettings, cardAdderForm);
-cardAdderFormValidation.enableValidation();
-
 function handleCardAdderFormSubmit(inputValues) {
   api
     .createCard(inputValues)
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(res.status);
-      }
-    })
     .then((json) => {
       const newCard = createCard(json);
       cardList.addItem(newCard);
       cardAdderModal.close();
+      cardAdderModal.setInputValues({ name: "", link: "" });
+      cardAdderFormValidation.resetValidation();
     })
     .catch((err) => {
       console.error(`ERROR: Failed to generate new card: ${err}`);
-      cardAdderModal.close();
     })
     .finally(() => {
-      cardAdderFormValidation.resetValidation();
-      cardAdderModal.resetSubmitButtonText();
+      cardAdderModal.renderLoading(false);
     });
 }
 
@@ -275,6 +241,12 @@ const cardAdderModal = new PopupWithForm(
   handleCardAdderFormSubmit
 );
 cardAdderModal.setEventListeners();
+
+const cardAdderFormValidation = new FormValidator(
+  formSettings,
+  cardAdderModal.getForm()
+);
+cardAdderFormValidation.enableValidation();
 
 profile.querySelector(".profile__add").addEventListener("click", (event) => {
   cardAdderModal.open();
