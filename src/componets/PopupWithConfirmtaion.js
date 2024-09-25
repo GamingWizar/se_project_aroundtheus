@@ -5,6 +5,15 @@ export default class PopupWithConfirmation extends Popup {
     super(popup);
     this._confirmFunction = confirmFunction;
     this._confirmButton = this._popup.querySelector(".modal__submit");
+    this._confirmButtonText = this._confirmButton.textContent;
+  }
+
+  handleButtonSaving() {
+    this._confirmButton.textContent = "Saving...";
+  }
+
+  resetConfirmButtonText() {
+    this._confirmButton.textContent = this._confirmButtonText;
   }
 
   _runConfirmFunction() {
@@ -23,8 +32,8 @@ export default class PopupWithConfirmation extends Popup {
   setEventListeners() {
     super.setEventListeners();
     this._confirmButton.addEventListener("click", () => {
+      this.handleButtonSaving();
       this._runConfirmFunction();
-      this.close();
     });
   }
 }

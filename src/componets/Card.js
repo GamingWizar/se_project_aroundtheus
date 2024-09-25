@@ -60,7 +60,7 @@ export class Card {
   }
 
   deleteCard() {
-    this._handleDeleteCard(this._id, this._element);
+    return this._handleDeleteCard(this._id, this._element);
   }
 
   _handleStartLiked() {

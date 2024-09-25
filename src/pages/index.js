@@ -25,11 +25,12 @@ const profileInfo = new UserInfo({
 const cardListLocation = document.querySelector(".cards");
 
 function deleteCard(cardId, card) {
-  api
+  return api
     .deleteCard(cardId)
     .then((res) => {
       if (res.ok) {
-        return card.remove();
+        card.remove();
+        return Promise.resolve();
       } else {
         return Promise.reject(res.status);
       }
@@ -60,7 +61,10 @@ function handleCardLike(isLiked, cardId) {
 }
 
 function confirmCardDelete(card) {
-  card.deleteCard();
+  card.deleteCard().finally(() => {
+    cardDeleteModal.close();
+    cardDeleteModal.resetConfirmButtonText();
+  });
 }
 
 const cardDeleteModal = new PopupWithConfirmation(
@@ -166,9 +170,11 @@ function handleProfileFormSubmit(inputValues) {
     })
     .catch((err) => {
       console.error(err);
+    })
+    .finally(() => {
+      profileEditModal.close();
+      profileEditModal.resetSubmitButtonText();
     });
-
-  profileEditModal.close();
 }
 
 const profileEditModal = new PopupWithForm(
@@ -202,14 +208,20 @@ profile
 //////////////////////// Avatar Edit Form
 
 function handleAvatarFormSubmit(inputValues) {
-  api.updateUserAvatar(inputValues).then((res) => {
-    if (res.ok) {
-      profileInfo.setUserAvatar(inputValues);
-    } else {
-      return Promise.reject(`Failed to update Avatar: ${res.status}`);
-    }
-  });
-  avatarEditModal.close();
+  api
+    .updateUserAvatar(inputValues)
+    .then((res) => {
+      if (res.ok) {
+        profileInfo.setUserAvatar(inputValues);
+      } else {
+        return Promise.reject(`Failed to update Avatar: ${res.status}`);
+      }
+    })
+    .finally(() => {
+      avatarEditModal.close();
+      avatarEditModal.resetSubmitButtonText();
+      avatarEditFormValidation.resetValidation();
+    });
 }
 
 const avatarEditModal = new PopupWithForm(
@@ -247,10 +259,14 @@ function handleCardAdderFormSubmit(inputValues) {
       const newCard = createCard(json);
       cardList.addItem(newCard);
       cardAdderModal.close();
-      cardAdderFormValidation.resetValidation();
     })
     .catch((err) => {
       console.error(`ERROR: Failed to generate new card: ${err}`);
+      cardAdderModal.close();
+    })
+    .finally(() => {
+      cardAdderFormValidation.resetValidation();
+      cardAdderModal.resetSubmitButtonText();
     });
 }
 
