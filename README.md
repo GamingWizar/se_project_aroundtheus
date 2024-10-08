@@ -14,10 +14,7 @@ This is the third project of the Web Development program at Triple Ten. It was c
 - Smooth animations
 - JS Classes
 - Webpack bundling
-
-## Plan on improving the project
-
-Add form of saving so card changes don't reset on page refresh
+- API Integration
 
 ## Link to website
 
